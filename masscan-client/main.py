@@ -8,7 +8,10 @@ config = ConfigParser.RawConfigParser()
 config.read('config.cfg')
 server = config.get('Main', 'server')
 proto = config.get('Main', 'proto')
-output_dir = config.get('Main', 'output_dir')
+workspace = str(sys.argv[1])
+output_dir = str(sys.argv[2])
+
+#output_dir = config.get('Main', 'output_dir')
 rate = config.get('Main', 'rate')
 
 i = 1
@@ -19,7 +22,7 @@ while True:
 		exit("Detected exit file")
 	print "Connecting..."
 	conn = httplib.HTTPConnection(server)
-	conn.request("GET", "/api/request.php?get=host")
+	conn.request("GET", "/api/request.php?get=host&workspace="+workspace)
 	r1 = conn.getresponse()
 	if (str(r1.status)+" "+str(r1.reason) == '404 Not Found'):
 		print "Server not configured correctly recieved: \nError 404 Not Found\nExiting..."
@@ -49,7 +52,7 @@ while True:
 	time.sleep(3)
 	print "Marking shard as complete.\nConnecting..."
 	conn2 = httplib.HTTPConnection(server)
-	conn2.request("GET", proto+"://"+server+"/api/request.php?complete=yes&host="+host+"&port="+port+"&shard="+shard)
+	conn2.request("GET", proto+"://"+server+"/api/request.php?complete=yes&host="+host+"&port="+port+"&shard="+shard+"&workspace="+workspace)
 	r2 = conn2.getresponse()
 	print r2.status, r2.reason
 	data2 = r2.read()
