@@ -29,7 +29,7 @@ if ($result->num_rows > 0) {
     $conn->close();
 }
 echo "{" . "\"host\"" ." : " . "\"" . $host . "\"" . ", \"port\"" . " : " . "\"" . $port . "\"" . ", \"shard\"" . " : " . "\"" . $shard . "\"" . "}";
-$sql = "UPDATE api SET Wait='1' WHERE Host='$host' AND Port='$port' AND Shard='$shard'";
+$sql = "UPDATE workspace_$current_workspace SET Wait='1' WHERE Host='$host' AND Port='$port' AND Shard='$shard'";
 $result = $conn->query($sql);
 }
 if ($_GET["complete"] == "yes") {
