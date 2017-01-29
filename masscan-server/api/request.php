@@ -2,7 +2,7 @@
 $servername = "localhost";
 $username = "input_user";
 $password = "input_pass";
-$dbname = "masscan_api";
+$dbname = "dobi";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -12,7 +12,8 @@ if ($conn->connect_error) {
 }
 //echo "Connected successfully\n";
 if ($_GET["get"] == "host") {
-$sql = "SELECT Host, Port, Wait, Shard FROM api WHERE Wait=0 AND Complete=0 LIMIT 1;";
+$current_workspace = $_GET["workspace"];
+$sql = "SELECT Host, Port, Wait, Shard FROM workspace_$current_workspace WHERE Wait=0 AND Complete=0 LIMIT 1;";
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     // output data of each row
@@ -36,8 +37,9 @@ if ($_GET["complete"] == "yes") {
 $current_host = $_GET["host"];
 $current_port = $_GET["port"];
 $current_shard = $_GET["shard"];
+$current_workspace = $_GET["workspace"];
 echo $current_host . " " . $current_port . " " . $current_shard;
-$sql = "UPDATE api SET Wait='0', Complete='1' WHERE Host='$current_host' AND Port='$current_port' AND Shard='$current_shard'";
+$sql = "UPDATE workspace_$current_workspace SET Wait='0', Complete='1' WHERE Host='$current_host' AND Port='$current_port' AND Shard='$current_shard'";
 $result = $conn->query($sql);
 }
 $conn->close();
